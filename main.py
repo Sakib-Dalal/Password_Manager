@@ -1,4 +1,5 @@
 import tkinter
+from tkinter import messagebox
 # ---------------------------- PASSWORD GENERATOR ------------------------------- #
 
 # ---------------------------- SAVE PASSWORD ------------------------------- #
@@ -9,18 +10,30 @@ def add_button_click():
     email_username_input = email_username_entry.get()
     password_input = password_entry.get()
     save_data = f"{website_input} | {email_username_input} | {password_input} \n"
-    # saving to file
-    with open("data.txt", "a") as data_file:
-        data_file.write(save_data)
 
-    # delete the data present on gui using .delete function
-    website_entry.delete(0, tkinter.END)
-    password_entry.delete(0, tkinter.END)
-    email_username_entry.delete(0, tkinter.END)
+    # empty entry pop up
+    if len(website_input) == 0 or len(email_username_input) == 0 or len(password_input) == 0:
+        messagebox.showinfo(title="Alert", message="Please don't left any fields empty!")
+    else:
+        # conformation pop up window
+        is_yes = messagebox.askyesno(title="conformation", message=f"Website: {website_input} \n"
+                                                                   f"Email: {email_username_input} \n"
+                                                                   f"Password: {password_input} \n"
+                                                                   f"Would you like to continue?")
+        if is_yes:
+            # saving to file
+            with open("data.txt", "a") as data_file:
+                data_file.write(save_data)
 
-    email_username_entry.insert(0, "your_email@example.com")
+            # delete the data present on gui using .delete function
+            website_entry.delete(0, tkinter.END)
+            password_entry.delete(0, tkinter.END)
+            email_username_entry.delete(0, tkinter.END)
+
+            email_username_entry.insert(0, "your_email@example.com")
 
 # ---------------------------- UI SETUP ------------------------------- #
+
 
 window = tkinter.Tk()
 window.title("Password Manager")
