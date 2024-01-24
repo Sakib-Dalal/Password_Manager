@@ -4,6 +4,7 @@ from tkinter import messagebox
 import random
 
 # External pkg
+# link:- https://pypi.org/project/pyperclip/
 import pyperclip
 
 # ---------------------------- PASSWORD GENERATOR ------------------------------- #
