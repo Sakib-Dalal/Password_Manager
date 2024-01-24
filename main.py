@@ -1,6 +1,43 @@
 import tkinter
 from tkinter import messagebox
+import random
+
 # ---------------------------- PASSWORD GENERATOR ------------------------------- #
+letters = ['a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k', 'l', 'm', 'n', 'o', 'p', 'q', 'r', 's', 't', 'u', 'v',
+           'w', 'x', 'y', 'z', 'A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N', 'O', 'P', 'Q', 'R',
+           'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z']
+numbers = ['0', '1', '2', '3', '4', '5', '6', '7', '8', '9']
+symbols = ['!', '#', '$', '%', '&', '(', ')', '*', '+']
+
+
+def password_generate():
+    # clear password entry
+    password_entry.delete(0, tkinter.END)
+
+    nr_letters = random.randint(8, 10)
+    nr_symbols = random.randint(2, 4)
+    nr_numbers = random.randint(2, 4)
+
+    password_list = []
+
+    for char in range(nr_letters):
+        password_list.append(random.choice(letters))
+
+    for char in range(nr_symbols):
+        password_list += random.choice(symbols)
+
+    for char in range(nr_numbers):
+        password_list += random.choice(numbers)
+
+    random.shuffle(password_list)
+
+    password = ""
+    for char in password_list:
+        password += char
+
+    # insert password in password entry
+    password_entry.insert(0, password)
+
 
 # ---------------------------- SAVE PASSWORD ------------------------------- #
 
@@ -31,6 +68,7 @@ def add_button_click():
             email_username_entry.delete(0, tkinter.END)
 
             email_username_entry.insert(0, "your_email@example.com")
+
 
 # ---------------------------- UI SETUP ------------------------------- #
 
@@ -74,7 +112,7 @@ password_entry = tkinter.Entry(width=20)
 password_entry.grid(row=3, column=1)
 
 # Generate Password Button
-generate_password_button = tkinter.Button(text="GeneratePassword", width=10)
+generate_password_button = tkinter.Button(text="GeneratePassword", width=10, command=password_generate)
 generate_password_button.grid(row=3, column=2)
 
 # Add Button
