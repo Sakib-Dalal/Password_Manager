@@ -1,6 +1,10 @@
+# internal pkg
 import tkinter
 from tkinter import messagebox
 import random
+
+# External pkg
+import pyperclip
 
 # ---------------------------- PASSWORD GENERATOR ------------------------------- #
 letters = ['a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k', 'l', 'm', 'n', 'o', 'p', 'q', 'r', 's', 't', 'u', 'v',
@@ -37,6 +41,7 @@ def password_generate():
 
     # insert password in password entry
     password_entry.insert(0, password)
+    pyperclip.copy(password)
 
 
 # ---------------------------- SAVE PASSWORD ------------------------------- #
