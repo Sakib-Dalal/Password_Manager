@@ -2,6 +2,7 @@
 import tkinter
 from tkinter import messagebox
 import random
+import json
 
 # External pkg
 # link:- https://pypi.org/project/pyperclip/
@@ -52,22 +53,23 @@ def add_button_click():
     website_input = website_entry.get()
     email_username_input = email_username_entry.get()
     password_input = password_entry.get()
-    save_data = f"{website_input} | {email_username_input} | {password_input} \n"
+    new_data = {website_input: {"email": email_username_input, "password": password_input}}
 
     # empty entry pop up
     if len(website_input) == 0 or len(email_username_input) == 0 or len(password_input) == 0:
         messagebox.showinfo(title="Alert", message="Please don't left any fields empty!")
     else:
-        # conformation pop up window
-        is_yes = messagebox.askyesno(title="conformation", message=f"Website: {website_input} \n"
-                                                                   f"Email: {email_username_input} \n"
-                                                                   f"Password: {password_input} \n"
-                                                                   f"Would you like to continue?")
-        if is_yes:
-            # saving to file
-            with open("data.txt", "a") as data_file:
-                data_file.write(save_data)
-
+        try:
+            with open("data.json", "r") as data_file:
+                data = json.load(fp=data_file)
+        except FileNotFoundError:
+            with open("data.json", "w") as data_file:
+                json.dump(obj=new_data, fp=data_file, indent=4)
+        else:
+            data.update(new_data)
+            with open("data.json", "w") as data_file:
+                json.dump(obj=data, fp=data_file, indent=4)
+        finally:
             # delete the data present on gui using .delete function
             website_entry.delete(0, tkinter.END)
             password_entry.delete(0, tkinter.END)
@@ -93,10 +95,33 @@ website_label = tkinter.Label(text="Website:")
 website_label.grid(row=1, column=0)
 
 # Website Entry
-website_entry = tkinter.Entry(width=35)
-website_entry.grid(row=1, column=1, columnspan=2)
+website_entry = tkinter.Entry(width=20)
+website_entry.grid(row=1, column=1, columnspan=1)
 # focus the cursor
 website_entry.focus()
+
+
+def search():
+    search_website = website_entry.get()
+    try:
+        with open("data.json", 'r') as data_file:
+            data = json.load(fp=data_file)
+    except FileNotFoundError:
+        messagebox.showinfo(title="File Error", message="Data file doesn't exist")
+    else:
+        if search_website in data:
+            email = data[search_website]['email']
+            password = data[search_website]['password']
+            messagebox.showinfo(title=search_website, message=f"Email: {email}\n Password: {password}")
+        elif len(search_website) == 0:
+            messagebox.showinfo(message="Please Enter website name to search")
+        else:
+            messagebox.showinfo(message="Website data not found")
+
+
+# Search button
+search_button = tkinter.Button(text="Search", width=10, command=search)
+search_button.grid(row=1, column=2)
 
 # Email/Username Label
 email_username_label = tkinter.Label(text="Email/Username:")
